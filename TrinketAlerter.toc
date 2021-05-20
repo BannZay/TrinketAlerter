@@ -1,0 +1,13 @@
+## Interface: 30300
+## Title: TrinketAlerter
+## SavedVariables: TrinketAlerterDB
+## Author: BannZay
+## Notes: Notifies you about trinket usage
+## DefaultState: Enabled
+
+#@no-lib-strip@
+embeds.xml
+#@end-no-lib-strip@
+
+TrinketAlerter.lua
+BlizzardOptions.lua

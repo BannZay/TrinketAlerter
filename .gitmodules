@@ -1,0 +1,3 @@
+[submodule "libs/BannZayLib"]
+	path = libs/BannZayLib
+	url = https://github.com/BannZay/BannZayLib

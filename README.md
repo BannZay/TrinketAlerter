@@ -1,0 +1,1 @@
+TremorWatch is a World of Warcraft addon. It shows trinket icon in the middle of your screen after enemy used it
