@@ -1,15 +1,17 @@
-local Array = BannZay.Array;
-local KVP = BannZay.KVP;
-local Logger = BannZay.Logger;
-local SlashCMDManager = BannZay.SlashCommandManager;
-local Utils = BannZay.Utils;
+local BannZayLib = LibStub:GetLibrary("BannZayLib-1.0")
+
+local Array = BannZayLib.Array;
+local KVP = BannZayLib.KVP;
+local Logger = BannZayLib.Logger;
+local Utils = BannZayLib.Utils;
+local Namespace = BannZayLib.Namespace;
 
 local db;
 local logger = Logger:New("TrinketAlerter", 3);
 local TrinketAlerter = LibStub("AceAddon-3.0"):NewAddon("TrinketAlerter");
 TrinketAlerter.Event = {}
 
-Namespace:RegisterGlobal("BannZay.TrinketAlerter", TrinketAlerter);
+Namespace:Register("BannZay.TrinketAlerter", TrinketAlerter);
 
 TrinketAlerter.Settings = 
 {
@@ -66,10 +68,9 @@ function TrinketAlerter:OnInitialize()
 	self.leadFrame = frame1;
 	self.framesPool = framesPool;
 	
-	local slashCmd = SlashCMDManager:New("TrinketAlerter");
-	slashCmd:AddEntry("TrinketAlerter");
-	slashCmd:AddEntry("ta");
-	slashCmd:AddCommand("lock", function() self:Lock(); end);
+	local taCommanManager = BannZayLib.SlashCommandManager:New("TrinketAlerter", "ta");
+	taCommanManager:AddCommand("lock", function() self:Lock(); end);
+	
 	Utils:SetMouseMove(self.leadFrame, false, nil, function() local scale = self.leadFrame:GetEffectiveScale(); db.x = self.leadFrame:GetLeft() * scale; db.y = self.leadFrame:GetTop() * scale end);
 	self.locked = false;
 	self.eventNotificatioDelay = 3;
