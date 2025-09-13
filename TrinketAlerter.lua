@@ -177,11 +177,13 @@ function TrinketAlerter:FlashFreeFrame(classId, unitName)
     frame.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classId]))
 
     -- Add the player's name to the notification frame
-    local playerNameText = frame:CreateFontString(nil, "OVERLAY")
-    playerNameText:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
-    playerNameText:SetText(unitName)
-    playerNameText:SetPoint("TOP", frame, "BOTTOM", 0, -2)
-
+    if frame.text == nil then
+      frame.text = frame:CreateFontString(nil, "OVERLAY")
+      frame.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
+      frame.text:SetPoint("TOP", frame, "BOTTOM", 0, -2)
+    end
+    frame.text:SetText(unitName)
+	
     UIFrameFlash(frame, db.animationSpeed, db.animationSpeed, db.animationTime, false)
 end
 
