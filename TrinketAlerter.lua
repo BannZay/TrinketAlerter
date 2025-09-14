@@ -153,32 +153,40 @@ function TrinketAlerter:BorrowFrame(borrowTime)
 end
 
 function TrinketAlerter:Notify(unit)
-	local unitName = UnitName(unit)
-	
-	if (self.lastNotification ~= nil and self.lastNotification:Item1() == unitName and GetTime() - self.lastNotification:Item2() < self.eventNotificatioDelay) then
-		return nil -- do not notify about the same events
-	end
-	
-	local unitClass, classId = UnitClass(unit);
-	
-	self:FlashFreeFrame(classId)
-	
-	self.lastNotification = KVP:New(unitName, GetTime())
+    local unitName = UnitName(unit)
+
+    if (self.lastNotification ~= nil and self.lastNotification:Item1() == unitName and GetTime() - self.lastNotification:Item2() < self.eventNotificatioDelay) then
+        return nil -- do not notify about the same events
+    end
+
+    local unitClass, classId = UnitClass(unit)
+
+    self:FlashFreeFrame(classId, unitName) -- Pass the unitName to the FlashFreeFrame function
+
+    self.lastNotification = KVP:New(unitName, GetTime())
 end
 
-function TrinketAlerter:FlashFreeFrame(classId)
+function TrinketAlerter:FlashFreeFrame(classId, unitName)
+    local frame = self:BorrowFrame(db.animationTime)
 
-	local frame = self:BorrowFrame(db.animationTime);
+    if frame == nil then
+        logger:Log(0, "No free notification frames found")
+        return
+    end
+
+    frame.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classId]))
+
+    -- Add the player's name to the notification frame
+    if frame.text == nil then
+      frame.text = frame:CreateFontString(nil, "OVERLAY")
+      frame.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
+      frame.text:SetPoint("TOP", frame, "BOTTOM", 0, -2)
+    end
+    frame.text:SetText(unitName)
 	
-	if frame == nil then
-		logger:Log(0, "No free notification frames found");
-		return;
-	end
-	
-	frame.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classId]));
-	
-	UIFrameFlash(frame, db.animationSpeed, db.animationSpeed, db.animationTime, false);
+    UIFrameFlash(frame, db.animationSpeed, db.animationSpeed, db.animationTime, false)
 end
+
 
 
 function TrinketAlerter.Event:UNIT_SPELLCAST_SUCCEEDED(unit, spell, rank)
